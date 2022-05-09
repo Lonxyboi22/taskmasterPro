@@ -45,8 +45,52 @@ var saveTasks = function() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
 };
 
+// $(".list-group").on("click", "p", function() {
+//   var text = $(this).text();
+//   console.log(text);
+// });
+
 $(".list-group").on("click", "p", function() {
-  console.log(this);
+  //declaration of text to equal input from modal:
+  var text = $(this)
+  .text()
+  .trim();
+  //declaration of what you input:
+  var textInput = $("<textarea>")
+  .addClass("form-control")
+  .val(text);
+  //replace the values if applicable:
+  $(this).replaceWith(textInput);
+  //allows you to edit but not saave the text:
+  textInput.trigger("focus");
+  console.log(text);
+});
+
+$(".list-group").on("blur", "textarea", function(){
+    //get the text's current value!
+    var text = $(this)
+    .val()
+    .trim();
+
+    //get the parent unordered list id attribute:
+    var status = $(this)
+      .closest(".list-group")
+      .attr("id")
+      .replace("list-", "");
+
+    var index = $(this)
+    .closest(".list-group-item")
+    .index();
+
+    //updating the overarching tasks object w/ new data:
+    tasks[status][index].text = text;
+    saveTasks();
+
+    var taskP = $("<p>")
+      .addClass("m-1")
+      .text(text);
+
+    $(this).replaceWith(taskP);
 });
 
 
